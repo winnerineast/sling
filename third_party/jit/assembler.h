@@ -36,7 +36,7 @@
 #ifndef JIT_ASSEMBLER_H_
 #define JIT_ASSEMBLER_H_
 
-#include "base/logging.h"
+#include "sling/base/logging.h"
 #include "third_party/jit/code.h"
 #include "third_party/jit/cpu.h"
 #include "third_party/jit/instructions.h"
@@ -329,6 +329,9 @@ class Assembler : public CodeGenerator {
   void repstosp() { emit_repstos(kPointerSize); }
   void repstosl() { emit_repstos(kInt32Size); }
   void repstosq() { emit_repstos(kInt64Size); }
+
+  // Loads an external reference into a register.
+  void load_extern(Register dst, const void *ptr, const string &symbol);
 
   // Instruction to load from an immediate 64-bit pointer into RAX.
   void load_rax(const void *ptr);

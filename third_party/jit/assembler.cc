@@ -35,8 +35,8 @@
 
 #include "third_party/jit/assembler.h"
 
-#include "base/logging.h"
-#include "base/macros.h"
+#include "sling/base/logging.h"
+#include "sling/base/macros.h"
 #include "third_party/jit/cpu.h"
 #include "third_party/jit/memory.h"
 #include "third_party/jit/types.h"
@@ -1020,6 +1020,14 @@ void Assembler::emit_lea(Register dst, const Operand &src, int size) {
   emit_rex(dst, src, size);
   emit(0x8D);
   emit_operand(dst, src);
+}
+
+void Assembler::load_extern(Register dst, const void *value, const string &symbol) {
+  EnsureSpace ensure_space(this);
+  emit_rex(dst, kPointerSize);
+  emit(0xB8 | dst.low_bits());
+  AddExtern(symbol, static_cast<Address>(const_cast<void *>(value)));
+  emitp(value);
 }
 
 void Assembler::load_rax(const void *value) {
